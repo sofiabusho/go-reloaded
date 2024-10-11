@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"os"
+	"strconv"
+	"strings"
 )
 
 func main() {
@@ -32,5 +34,14 @@ func main() {
 		return
 	}
 
-	fmt.Println("Modifications applied successfully!")
+	if strings.Contains(inputFilename, "(hex)") {
+		hexIndex := strings.Index(content, "(hex)")
+		lastSpaceIndex := strings.LastIndex(content[:hexIndex], " ")
+		hexWord := content[lastSpaceIndex+1 : hexIndex-1]
+
+		decimalValue, err := strconv.ParseInt(hexWord, 16, 64)
+
+		modifiedContent := strings.Replace(content, hexWord+" (hex)", fmt.Spintf("%d", decimalValue), 1)
+	}
+
 }
