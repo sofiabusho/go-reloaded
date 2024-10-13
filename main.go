@@ -146,13 +146,13 @@ func capitalizeWord(word string) string {
 func adjustPunctuation(text string) string {
 
 	// Remove spaces around punctuation
-	text = regexp.MustCompile(`\s*([.,!?;:]+)\s*`).ReplaceAllString(text, "$1 ")
+	text = regexp.MustCompile(`\s*([.,!?;:])`).ReplaceAllString(text, "$1")
 
-	// Format single quotes
-	text = regexp.MustCompile(`'\s*([^']+?)\s*'`).ReplaceAllString(text, "$1 ")
+	// Add a space after punctuation (if there isn't one already) only when followed by a word
+	text = regexp.MustCompile(`([.,!?;:])([^\s])`).ReplaceAllString(text, "$1 $2")
 
 	// Handle multiple words within single quotes
-	text = regexp.MustCompile(`'\s*(.*?)\s*'`).ReplaceAllString(text, "$1 ")
+	text = regexp.MustCompile(`'\s*(.*?)\s*'`).ReplaceAllString(text, "'$1'")
 
 	return text
 }
