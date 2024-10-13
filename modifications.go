@@ -116,20 +116,29 @@ func capitalizeWord(word string) string {
 // Function to adjust punctuation
 func adjustPunctuation(text string) string {
 
-	// Remove spaces around punctuation
+	// Remove spaces around individual punctuation marks
 	text = regexp.MustCompile(`\s*([.,!?;:])`).ReplaceAllString(text, "$1")
 
-	// Add a space after punctuation (if there isn't one already) only when followed by a word
-	text = regexp.MustCompile(`([.,!?;:])([^\s])`).ReplaceAllString(text, "$1 $2")
+	// Add a space after punctuation followed directly by a word character
+	text = regexp.MustCompile(`([.,!?;:])([A-Za-z])`).ReplaceAllString(text, "$1 $2")
 
 	// Handle multiple words within single quotes
 	text = regexp.MustCompile(`'\s*(.*?)\s*'`).ReplaceAllString(text, "'$1'")
+
+	// Handle ellipses (...) or multiple punctuation marks like !? by ensuring no space after them
+	text = regexp.MustCompile(`([.]{3}|[!?]{2,})([^\s])`).ReplaceAllString(text, "$1 $2")
 
 	return text
 }
 
 // Function to handle 'a' to 'an'
 func handleAtoAn(text string) string {
+	re := regexp.MustCompile(`\b([Aa])\s+([aeiouhAEIOUH]\w*)`)
 	// Regex to find "a" followed by a word starting with a vowel
-	return regexp.MustCompile(`\ba\s+([aeiouhAEIOUH]\w*)`).ReplaceAllString(text, "an $1")
+	return re.ReplaceAllStringFunc(text, func(match string) string {
+		if match[0] == 'A' {
+			return "An " + match[2:] // Capitalized replacement for "A"
+		}
+		return "an " + match[2:] // Lowercase replacement for "a"
+	})
 }
