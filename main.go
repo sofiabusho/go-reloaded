@@ -29,9 +29,6 @@ func main() {
 	// Convert byte content to string for manipulation
 	modifiedContent := string(content)
 
-	// Check if the file contains "(hex)" or "(bin)" and replace the hex value with decimal and the bin value with binary
-	modifiedContent = handleHexAndBin(modifiedContent)
-
 	modifiedContent = handleAllModifications(modifiedContent)
 
 	// Write the modified content to the output file
@@ -42,6 +39,25 @@ func main() {
 	}
 }
 
+// Function to handle all the text modifications (to be implemented)
+func handleAllModifications(content string) string {
+
+	// Handle hex and bin
+	content = handleHexAndBin(content)
+
+	// Handle (up), (low) and (cap)
+	content = handleTextModifications(content)
+
+	// Handle punctuation formatting
+	content = adjustPunctuation(content)
+
+	// Handle 'a' to 'an'
+	content = handleAtoAn(content)
+
+	return content
+}
+
+// Function to handle hex and bin modifications
 func handleHexAndBin(content string) string {
 	// Regex to find hex and bin patterns
 	hexPattern := regexp.MustCompile(`(\b[0-9a-fA-F]+)\s*\(hex\)`)
@@ -70,22 +86,9 @@ func handleHexAndBin(content string) string {
 	return content
 }
 
-// Function to handle text modifications (to be implemented)
-func handleAllModifications(content string) string {
-	// Handle (up), (low) and (cap)
-	content = handleTextModifications(content)
-
-	// Handle punctuation formatting
-	content = adjustPunctuation(content)
-
-	// Handle 'a' to 'an'
-	content = handleAtoAn(content)
-
-	return content
-}
-
+// Function to handle the (up, n), (low, n) and (cap, n)
 func handleTextModifications(text string) string {
-	// Handle (up, n), (low, n) and (cap, n)
+
 	re := regexp.MustCompile(`\s*\((up|low|cap)(?:,\s*(\d+))?\)`)
 	matches := re.FindAllStringSubmatchIndex(text, -1)
 
@@ -134,7 +137,7 @@ func handleTextModifications(text string) string {
 	return text
 }
 
-// Capitilize the first letter of a word
+// Functon to capitilize the first letter of a word
 func capitalizeWord(word string) string {
 	if len(word) == 0 {
 		return word
@@ -157,7 +160,7 @@ func adjustPunctuation(text string) string {
 	return text
 }
 
-// Handle 'a' to 'an'
+// Function to handle 'a' to 'an'
 func handleAtoAn(text string) string {
 	// Regex to find "a" followed by a word starting with a vowel
 	return regexp.MustCompile(`\ba\s+([aeiouhAEIOUH]\w*)`).ReplaceAllString(text, "an $1")
