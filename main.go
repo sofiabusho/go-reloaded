@@ -23,6 +23,10 @@ func main() {
 		return
 	}
 
+	if len(content) == 0 {
+		fmt.Println("The input file is empty, please add some content to it!")
+	}
+
 	// Convert byte content to string for manipulation
 	modifiedContent := handleAllModifications(string(content))
 
