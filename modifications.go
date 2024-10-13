@@ -27,7 +27,7 @@ func handleAllModifications(content string) string {
 
 // Function to handle hex and bin modifications
 func handleHexAndBin(content string) string {
-	// Regex to find hex and bin patterns
+	// Regex looks for sequences of hexadecimal digits followed by (hex) and  binary numbers followed by (bin)
 	hexPattern := regexp.MustCompile(`(\b[0-9a-fA-F]+)\s*\(hex\)`)
 	binPattern := regexp.MustCompile(`(\b[01]+)\s*\(bin\)`)
 
