@@ -89,13 +89,14 @@ func handleTextModifications(text string) string {
 		// Extract the part of the text before the marker and apply case modification
 		words := strings.Fields(text[:match[0]]) // Extract the words before the marker
 
-		startWord := len(words) - count // Identify the starting word
+		startWord := len(words) - count // Identify the starting word based on the 'count'
 		if startWord < 0 {
-			startWord = 0 // Ensure we do not go out of range
+			startWord = 0 // Ensure we do not go out of range, by making sure 'startWord' is not negative
 		}
 
+		// Loop through the words starting from 'startWord'
 		for j := startWord; j < len(words); j++ {
-			words[j] = caseFunc(words[j])
+			words[j] = caseFunc(words[j]) // Apply the 'caseFunc' to modify the case of each word
 		}
 
 		// Rebuild the text without the marker and with the modifications applied
